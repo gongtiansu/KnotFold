@@ -31,7 +31,7 @@ python KnotFold_nn.py -i <RNA_fasta> -o <output_probability> (-r) (--cuda)
 ```sh
 KnotFold_mincostflow <prior_probability> <reference_probability> 
 ```
-3. KnotFold.py: predict RNA secondary structure (bpseq format) from RNA sequence (fasta format).  
+3. KnotFold.py: predicting RNA secondary structure (bpseq format) from RNA sequence (fasta format).  
 ```sh
 python KnotFold.py -i <RNA_fasta> -o <output_dictionary> 
 ```
