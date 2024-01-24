@@ -214,54 +214,6 @@ class MainModel(nn.Module):
         out = {"contact_logits": px}
         if inference_only:
             return out
-        out.update(self._compute_loss(out, data))
-        if not self.training:
-            with torch.no_grad():
-                out.update(self._calc_metric(out, data))
-        return out
-
-    def _compute_loss(self, out, data):
-        pred = out["contact_logits"].permute(0, 3, 1, 2)
-        truth = data["contact"]
-        weight = torch.tensor([1.0, 1.0], device=pred.device)
-        return {
-            "cross_entropy_loss": F.cross_entropy(
-                pred, truth, weight=weight, ignore_index=-1
-            )
-        }
-
-    def _calc_metric(self, out, data):
-        pred = torch.softmax(out["contact_logits"].permute(0, 3, 1, 2), dim=1)
-        pred = (pred + pred.transpose(-1, -2)) / 2.0
-        pred = pred[:, 1]
-        truth = data["contact"]
-
-        mask = torch.triu(torch.ones_like(pred, dtype=torch.bool), 1)
-        pred, truth = pred[mask], truth[mask]
-        pseudoknot = data["pseudoknot"][mask]
-        pred = pred.cpu().numpy()
-        truth = truth.cpu().numpy()
-        pseudoknot = pseudoknot.cpu().numpy()
-
-        pred_prob = pred
-        pred = pred > 0.3
-
-        prec, recall, f1, _ = precision_recall_fscore_support(
-            y_true=truth, y_pred=pred, zero_division=0, average="binary"
-        )
-        metric = {"precision_m": 100.0 * prec, "recall_m": 100.0 * recall, "F1_m": f1}
-
-        for status in [0, 1, 2]:
-            prec, recall, f1, _ = precision_recall_fscore_support(
-                y_true=truth[pseudoknot == status],
-                y_pred=pred[pseudoknot == status],
-                zero_division=0,
-                average="binary",
-            )
-            metric["precision_pseudoknot%i_m" % status] = 100.0 * prec
-            metric["recall_pseudoknot%i_m" % status] = 100.0 * recall
-            metric["F1_pseudoknot%i_m" % status] = f1
-
             metric["pred%i" % status] = pred_prob[pseudoknot == status]
             metric["truth%i" % status] = truth[pseudoknot == status]
 
