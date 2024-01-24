@@ -214,7 +214,3 @@ class MainModel(nn.Module):
         out = {"contact_logits": px}
         if inference_only:
             return out
-            metric["pred%i" % status] = pred_prob[pseudoknot == status]
-            metric["truth%i" % status] = truth[pseudoknot == status]
-
-        return metric
