@@ -31,6 +31,10 @@ python KnotFold.py -i <RNA_fasta> -o <output_dictionary> (--cuda)
 ```sh
 KnotFold_mincostflow <prior_probability> <reference_probability> 
 ```
+3. KnotFold_mincostflow.cc: the source C++ code of the minimum-cost flow algorithm. 
+```sh
+g++ KnotFold_mincostflow.cc -o KnotFold_mincostflow -std=c++0x -O2 
+```
 ## Example
 ```sh
 cd example
