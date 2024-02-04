@@ -40,6 +40,8 @@ g++ KnotFold_mincostflow.cc -o KnotFold_mincostflow -std=c++0x -O2
 cd example
 ./run_example.sh
 ```
+## Training
+We provide [training code](https://drive.google.com/file/d/1s_pJ4cK7q7tAuG2wCUf6zMVfno58lNQd/view?usp=sharing) for KnotFold.
 
 ## License
 Distributed under the MIT License. See `LICENSE` for more information.
